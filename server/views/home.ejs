@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>home</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <%- include("./partials/hedder") %>
+    
+    <!-- creating form for posting todo -->
+        <div class="form-con">
+            <h1>Create todos</h1>
+            <form action="/todo" method="post">
+                <input type="text" name="todo" id="todo" placeholder="Enter Todo">
+                <button id="but" type="submit">add</button>
+            </form>
+        </div>
+
+        <!-- creating table -->
+        <div class="table-con">
+            <table>
+                <!-- table hiddings -->
+                <tr>
+                    <th>TODOS</th>
+                    <th>UPDATE TODOS</th>
+                    <th>UPDATE STATUS</th>
+                    <th>DELETE TODOS</th>
+                </tr>
+
+                <!-- showing the data -->
+                <%locals.todos.forEach((doc)=>{ %>
+                    <tr>
+                    <%if(doc.isComplate){%>
+                       <td class="strike">
+                           <%= doc.todo %>
+                       </td>
+                    <%}else{%>
+                        <td>
+                            <%= doc.todo %>
+                        </td>
+                     <%}%>
+
+
+                    <!-- updateing the todo -->
+                         <td>
+                            <a href="/todo/<%= doc._id%>">Update</a>
+                         </td>
+
+                    <!-- updating the status -->
+                         <td>
+                             <form action="/todo/status/<%= doc._id%>?_method=PATCH" method="post">
+                                 <input type="hidden" name="isComplate" value="true">
+                                 <button type="submit">update_status</button>
+                             </form>
+                         </td>
+
+                    <!-- deleting the todo -->
+                         <td>
+                             <form action="/todo/<%= doc._id%>?_method=DELETE" method="post">
+                                 <button type="submit">delete</button>
+                             </form>
+                         </td>
+                    </tr>
+                <% }) %>
+            </table>
+        </div>
+        <%- include("./partials/footer") %>
+
+</body>
+
+</html>
